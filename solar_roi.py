@@ -41,10 +41,11 @@ class Rate:
     self.smmr_offpk_buy = self.smmr_offpk_sell + self.distr
     self.wntr_peak_buy = self.wntr_peak_sell + self.distr
     self.wntr_offpk_buy = self.wntr_offpk_sell + self.distr
-    print(self.name + " Summer Peak: %.3f" % self.smmr_peak_buy)
-    print(self.name + " Summer OffP: %.3f" % self.smmr_offpk_buy)
-    print(self.name + " Winter Peak: %.3f" % self.wntr_peak_buy)
-    print(self.name + " Winter OffP: %.3f" % self.wntr_offpk_buy)
+    print(self.name + " Purchase Rates")
+    print("\tSummer Peak: %.3f" % self.smmr_peak_buy)
+    print("\tSummer OffP: %.3f" % self.smmr_offpk_buy)
+    print("\tWinter Peak: %.3f" % self.wntr_peak_buy)
+    print("\tWinter OffP: %.3f" % self.wntr_offpk_buy + "\n")
 
 # Time-invariant Costs
 PSCR = 1.917 # Power Supply Cost Recovery
@@ -116,5 +117,6 @@ df["D1_11_profit"] = df["D1_11_rate"] / 100 * df["AC System Output (W)"] / 1000
 df["D1_2_profit"] = df["D1_2_rate"] / 100 * df["AC System Output (W)"] / 1000
 
 #print(df.iloc[:48])
-print(df["D1_11_profit"].sum())
-print(df["D1_2_profit"].sum())
+print("Annual profit selling all electricity back to DTE:")
+print("\t D1_11: $" + '{:0,.2f}'.format(df["D1_11_profit"].sum()))
+print("\t D1_2: $" + '{:0,.2f}'.format(df["D1_2_profit"].sum()))
