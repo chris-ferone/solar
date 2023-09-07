@@ -16,10 +16,11 @@ df = pd.read_csv('pvwatts_hourly.csv', skiprows = 31)
 # D1.2
 
 
-# Create price vector, which ultimately will be multiplied by power cost vector
-df["price"] = np.nan
+# Create rate vector, which ultimately will be multiplied by power cost vector
+df["rate"] = np.nan
+df["profit"] = np.nan
 
-# Each element of price vector will have one of 4 possible values
+# Each element of rate vector will have one of 4 possible values
 
 # D1.2
 for i in range(0,len(df.index)):
@@ -29,20 +30,19 @@ for i in range(0,len(df.index)):
         # winter
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("price")] = 6.814
+            df.iloc[i, df.columns.get_loc("rate")] = 6.814
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("price")] = 14.704
+            df.iloc[i, df.columns.get_loc("rate")] = 14.704
     else:
         # summer
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("price")] = 7.013
+            df.iloc[i, df.columns.get_loc("rate")] = 7.013
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("price")] = 17.055
+            df.iloc[i, df.columns.get_loc("rate")] = 17.055
 
-print(df)
 
 
 # Loop through each month of the year, then each day, then each hour.
@@ -50,4 +50,10 @@ print(df)
 #for i in range(0,len(df.index)):
 for i in range(0,24):
     # print(df.iloc[0])
-    print(df.iloc[i][12]/1000)
+    print(df.iloc[i][12])
+
+df['profit'] = df['rate']/100*df['AC System Output (W)']/1000
+
+print(df.iloc[:48])
+
+print(df["profit"].sum())
