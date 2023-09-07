@@ -41,8 +41,12 @@ class Rate:
     self.smmr_offpk_buy = self.smmr_offpk_sell + self.distr
     self.wntr_peak_buy = self.wntr_peak_sell + self.distr
     self.wntr_offpk_buy = self.wntr_offpk_sell + self.distr
+    print(self.name + " Summer Peak: %.3f" % self.smmr_peak_buy)
+    print(self.name + " Summer OffP: %.3f" % self.smmr_offpk_buy)
+    print(self.name + " Winter Peak: %.3f" % self.wntr_peak_buy)
+    print(self.name + " Winter OffP: %.3f" % self.wntr_offpk_buy)
 
-# Fixed Costs
+# Time-invariant Costs
 PSCR = 1.917 # Power Supply Cost Recovery
 distr = 6.879 # Distributions
 
