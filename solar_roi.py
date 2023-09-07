@@ -4,11 +4,27 @@
 import pandas as pd
 import numpy as np
 
-PSCR = 1.917
-D1_2_wntr_peak = 14.704
-D1_2_wntr_offpk = 6.814
-D1_2_smmr_peak = 17.055
-D1_2_smmr_offpk = 7.013
+# DTE Residential Electric Pricing Options: https://newlook.dteenergy.com/wps/wcm/connect/23195474-a4d1-4d38-aa30-a4426fd3336b/WholeHouseRateOptions.pdf?MOD=AJPERES
+PSCR = 1.917 # Power Supply Cost Recovery
+
+# Time of Day 3 p.m. – 7 p.m. Standard Base Rate (D1.11) 
+# TODO
+
+# Time of Day 11 a.m. - 7 p.m. Rate (D1.2) 
+D1_2_smmr_peak_cap = 11.033
+D1_2_smmr_peak_ncp = 4.105
+D1_2_smmr_offpk_cap = 0.991
+D1_2_smmr_offpk_ncp = 4.105
+
+D1_2_wntr_peak_cap = 8.682
+D1_2_wntr_peak_ncp = 4.105
+D1_2_wntr_offpk_cap = 0.792
+D1_2_wntr_offpk_ncp = 4.105
+
+D1_2_smmr_peak = D1_2_smmr_peak_cap + D1_2_smmr_peak_ncp + PSCR
+D1_2_smmr_offpk = D1_2_smmr_offpk_cap + D1_2_smmr_offpk_ncp + PSCR
+D1_2_wntr_peak = D1_2_wntr_peak_cap + D1_2_wntr_peak_ncp + PSCR
+D1_2_wntr_offpk = D1_2_wntr_offpk_cap + D1_2_wntr_offpk_ncp + PSCR
 
 # import csv file generate from NREL PV_Watts Calculator
 df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)
