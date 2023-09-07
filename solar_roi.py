@@ -19,5 +19,8 @@ print(df)
 #for i in range(0,len(df.index)):
 for i in range(0,24):
     # print(df.iloc[0])
-    print(df.iloc[i][11])
+    print(df.iloc[i][11]/1000)
+
+# Create price vector, which ultimately will be multiplied by power vector
+# Price vector will have 4 values
 
