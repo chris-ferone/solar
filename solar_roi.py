@@ -85,9 +85,9 @@ df["profit"] = np.nan
 for i in range(0, len(df.index)):
     hour = df.iloc[i][2]
     month = df.iloc[i][0]
-    if (month < 6) or (month > 10):
+    if (month < D1_2.smmr[0]) or (month > D1_2.smmr[1]):
         # winter
-        if (hour < 11) or (hour > 19):
+        if (hour < D1_2.peak[0]) or (hour > D1_2.peak[1]):
             # off peak
             df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_offpk_sell
         else:
@@ -95,7 +95,7 @@ for i in range(0, len(df.index)):
             df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_peak_sell
     else:
         # summer
-        if (hour < 11) or (hour > 19):
+        if (hour < D1_2.peak[0]) or (hour > D1_2.peak[1]):
             # off peak
             df.iloc[i, df.columns.get_loc("rate")] = D1_2.smmr_offpk_sell
         else:
