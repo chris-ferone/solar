@@ -81,26 +81,29 @@ df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)
 df["rate"] = np.nan
 df["profit"] = np.nan
 
+def calc_profit(rate):
+    if (month < rate.smmr[0]) or (month > rate.smmr[1]):
+        # winter
+        if (hour < rate.peak[0]) or (hour > rate.peak[1]):
+            # off peak
+            df.iloc[i, df.columns.get_loc("rate")] = rate.wntr_offpk_sell
+        else:
+            # on peak
+            df.iloc[i, df.columns.get_loc("rate")] = rate.wntr_peak_sell
+    else:
+        # summer
+        if (hour < rate.peak[0]) or (hour > rate.peak[1]):
+            # off peak
+            df.iloc[i, df.columns.get_loc("rate")] = rate.smmr_offpk_sell
+        else:
+            # on peak
+            df.iloc[i, df.columns.get_loc("rate")] = rate.smmr_peak_sell
+
 # D1.2
 for i in range(0, len(df.index)):
     hour = df.iloc[i][2]
     month = df.iloc[i][0]
-    if (month < D1_2.smmr[0]) or (month > D1_2.smmr[1]):
-        # winter
-        if (hour < D1_2.peak[0]) or (hour > D1_2.peak[1]):
-            # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_offpk_sell
-        else:
-            # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_peak_sell
-    else:
-        # summer
-        if (hour < D1_2.peak[0]) or (hour > D1_2.peak[1]):
-            # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2.smmr_offpk_sell
-        else:
-            # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2.smmr_peak_sell
+    calc_profit(D1_2)
 
 df["profit"] = df["rate"] / 100 * df["AC System Output (W)"] / 1000
 
