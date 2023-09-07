@@ -1,0 +1,1 @@
+# Calculate return on investment of solar panels
