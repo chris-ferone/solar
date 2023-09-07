@@ -4,6 +4,12 @@
 import pandas as pd
 import numpy as np
 
+PSCR = 1.917
+D1_2_wntr_peak = 14.704
+D1_2_wntr_offpk = 6.814
+D1_2_smmr_peak = 17.055
+D1_2_smmr_offpk = 7.013
+
 # import csv file generate from NREL PV_Watts Calculator
 df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)
 
@@ -20,18 +26,18 @@ for i in range(0, len(df.index)):
         # winter
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = 6.814
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2_wntr_offpk
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = 14.704
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2_wntr_peak
     else:
         # summer
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = 7.013
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2_smmr_offpk
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = 17.055
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2_smmr_peak
 
 df["profit"] = df["rate"] / 100 * df["AC System Output (W)"] / 1000
 
