@@ -4,27 +4,48 @@
 import pandas as pd
 import numpy as np
 
-# DTE Residential Electric Pricing Options: https://newlook.dteenergy.com/wps/wcm/connect/23195474-a4d1-4d38-aa30-a4426fd3336b/WholeHouseRateOptions.pdf?MOD=AJPERES
-PSCR = 1.917 # Power Supply Cost Recovery
+# Create class to calculate electricity rates purchase and sell back rates
+# DTE Residential Electric Pricing Options: 
+# https://newlook.dteenergy.com/wps/wcm/connect/23195474-a4d1-4d38-aa30-a4426fd3336b/WholeHouseRateOptions.pdf?MOD=AJPERES
+
+class Rate:
+  def __init__(self):
+    self.smmr_peak_cap = 0
+    self.smmr_peak_ncp = 0
+    self.smmr_offpk_cap = 0
+    self.smmr_offpk_ncp = 0
+    self.wntr_peak_cap = 0
+    self.wntr_peak_ncp = 0
+    self.wntr_offpk_cap = 0
+    self.wntr_offpk_ncp = 0
+    self.smmr_peak = 0
+    self.smmr_offpk = 0
+    self.wntr_peak = 0
+    self.wntr_offpk = 0
+
+  def calc_sellback_rates(self, PSCR):
+    self.smmr_peak = self.smmr_peak_cap + self.smmr_peak_ncp + PSCR
+    self.smmr_offpk = self.smmr_offpk_cap + self.smmr_offpk_ncp + PSCR
+    self.wntr_peak = self.wntr_peak_cap + self.wntr_peak_ncp + PSCR
+    self.wntr_offpk = self.wntr_offpk_cap + self.wntr_offpk_ncp + PSCR
+
+# Power Supply Cost Recovery
+PSCR = 1.917 
+
+# Time of Day 11 a.m. - 7 p.m. Rate (D1.2) 
+D1_2 = Rate()
+D1_2.smmr_peak_cap = 11.033
+D1_2.smmr_peak_ncp = 4.105
+D1_2.smmr_offpk_cap = 0.991
+D1_2.smmr_offpk_ncp = 4.105
+D1_2.wntr_peak_cap = 8.682
+D1_2.wntr_peak_ncp = 4.105
+D1_2.wntr_offpk_cap = 0.792
+D1_2.wntr_offpk_ncp = 4.105
+D1_2.calc_sellback_rates(PSCR)
 
 # Time of Day 3 p.m. – 7 p.m. Standard Base Rate (D1.11) 
 # TODO
-
-# Time of Day 11 a.m. - 7 p.m. Rate (D1.2) 
-D1_2_smmr_peak_cap = 11.033
-D1_2_smmr_peak_ncp = 4.105
-D1_2_smmr_offpk_cap = 0.991
-D1_2_smmr_offpk_ncp = 4.105
-
-D1_2_wntr_peak_cap = 8.682
-D1_2_wntr_peak_ncp = 4.105
-D1_2_wntr_offpk_cap = 0.792
-D1_2_wntr_offpk_ncp = 4.105
-
-D1_2_smmr_peak = D1_2_smmr_peak_cap + D1_2_smmr_peak_ncp + PSCR
-D1_2_smmr_offpk = D1_2_smmr_offpk_cap + D1_2_smmr_offpk_ncp + PSCR
-D1_2_wntr_peak = D1_2_wntr_peak_cap + D1_2_wntr_peak_ncp + PSCR
-D1_2_wntr_offpk = D1_2_wntr_offpk_cap + D1_2_wntr_offpk_ncp + PSCR
 
 # import csv file generate from NREL PV_Watts Calculator
 df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)
@@ -42,18 +63,18 @@ for i in range(0, len(df.index)):
         # winter
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2_wntr_offpk
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_offpk
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2_wntr_peak
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2.wntr_peak
     else:
         # summer
         if (hour < 11) or (hour > 19):
             # off peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2_smmr_offpk
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2.smmr_offpk
         else:
             # on peak
-            df.iloc[i, df.columns.get_loc("rate")] = D1_2_smmr_peak
+            df.iloc[i, df.columns.get_loc("rate")] = D1_2.smmr_peak
 
 df["profit"] = df["rate"] / 100 * df["AC System Output (W)"] / 1000
 
