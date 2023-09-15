@@ -33,28 +33,43 @@ class Rate:
     def __init__(self, name, elctr_rates):
         self.pscr = elctr_rates['time_invariant_costs'][0]['pscr']
         self.distr = elctr_rates['time_invariant_costs'][0]['distr']
+
         for rate in elctr_rates['time_varying_costs']:
             if rate['name'] == name:
                 self.name = rate['name']
-                self.smmr = rate['smmr_mnths']
-                self.peak = rate['peak_hours']
-                self.smmr_peak_cap = rate['smmr_peak_cap']
-                self.smmr_peak_ncp = rate['smmr_peak_ncp']
-                self.smmr_offpk_cap = rate['smmr_offpk_cap']
-                self.smmr_offpk_ncp = rate['smmr_offpk_ncp']
-                self.wntr_peak_cap = rate['wntr_peak_cap']
-                self.wntr_peak_ncp = rate['wntr_peak_ncp']
-                self.wntr_offpk_cap = rate['wntr_offpk_cap']
-                self.wntr_offpk_ncp = rate['wntr_offpk_ncp']
-        self.smmr_peak_sell = 0
-        self.smmr_offpk_sell = 0
-        self.wntr_peak_sell = 0
-        self.wntr_offpk_sell = 0
-        self.smmr_peak_buy = 0
-        self.smmr_offpk_buy = 0
-        self.wntr_peak_buy = 0
-        self.wntr_offpk_buy = 0
-        self.calc_rates()
+                if name == "D1_11" or name == "D1_2":
+                    self.smmr = rate['smmr_mnths']
+                    self.peak = rate['peak_hours']
+                    self.smmr_peak_cap = rate['smmr_peak_cap']
+                    self.smmr_peak_ncp = rate['smmr_peak_ncp']
+                    self.smmr_offpk_cap = rate['smmr_offpk_cap']
+                    self.smmr_offpk_ncp = rate['smmr_offpk_ncp']
+                    self.wntr_peak_cap = rate['wntr_peak_cap']
+                    self.wntr_peak_ncp = rate['wntr_peak_ncp']
+                    self.wntr_offpk_cap = rate['wntr_offpk_cap']
+                    self.wntr_offpk_ncp = rate['wntr_offpk_ncp']
+                # Applicable to D1_8 rate
+                if name == 'D1_8':
+                    self.peak_sell = rate['peak_cap'] + rate['peak_ncp'] + self.pscr
+                    self.midpk_sell = rate['midpk_cap'] + rate['midpk_ncp'] + self.pscr
+                    self.offpk_sell = rate['offpk_cap'] + rate['offpk_ncp'] + self.pscr
+                    self.peak_buy = self.peak_sell + self.distr
+                    self.midpk_buy = self.midpk_sell + self.distr  
+                    self.offpk_buy = self.offpk_sell + self.distr  
+        
+        # Applicable to D1_11 and D1_2 rates
+        if name == "D1_11" or name == "D1_2":
+            self.smmr_peak_sell = 0
+            self.smmr_offpk_sell = 0
+            self.wntr_peak_sell = 0
+            self.wntr_offpk_sell = 0
+            self.smmr_peak_buy = 0
+            self.smmr_offpk_buy = 0
+            self.wntr_peak_buy = 0
+            self.wntr_offpk_buy = 0
+            self.calc_rates()
+
+   
 
     def calc_rates(self):
         # Calculate cost to purchase and sell back electricity in the summer and
@@ -78,6 +93,7 @@ class Rate:
 # Define electricity rates
 D1_11 = Rate("D1_11", elctr_rates)
 D1_2 = Rate("D1_2", elctr_rates)
+D1_8 = Rate("D1_8", elctr_rates)
 
 # Import hourly solar energy generation csv file created by NREL PV_Watts Calculator
 df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)

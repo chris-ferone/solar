@@ -22,7 +22,7 @@
     },
     {
       "name": "D1_2",
-      "long_name": "Time of Day 11 a.m. - 7 p.m. Rate (D1.2) ",
+      "long_name": "Time of Day 11 a.m. - 7 p.m. Rate (D1.2)",
       "smmr_mnths": [6, 10],
       "peak_hours": [11, 19],
       "smmr_peak_cap": 11.033,
@@ -33,6 +33,18 @@
       "wntr_peak_ncp": 4.105,
       "wntr_offpk_cap": 0.792,
       "wntr_offpk_ncp": 4.105
+    },
+    {
+      "name": "D1_8",
+      "long_name": "Dynamic Peak Pricing Rate (D1.8)",
+      "peak_hours": [15, 19],
+      "mdpeak_hours": [[7, 15], [19, 23]],
+      "peak_cap": 12.658,
+      "peak_ncp": 3.403,
+      "midpk_cap": 5.486,
+      "midpk_ncp": 3.403,
+      "offpk_cap": 1.184,
+      "offpk_ncp": 3.403
     }
   ]
 }
