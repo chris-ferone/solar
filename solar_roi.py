@@ -31,65 +31,46 @@ f.close()
 
 class Rate:
     def __init__(self, name, elctr_rates):
-        self.pscr = elctr_rates['time_invariant_costs'][0]['pscr']
+        pscr = elctr_rates['time_invariant_costs'][0]['pscr']
         self.distr = elctr_rates['time_invariant_costs'][0]['distr']
 
         for rate in elctr_rates['time_varying_costs']:
             if rate['name'] == name:
-                self.name = rate['name']
-                if name == "D1_11" or name == "D1_2":
-                    self.smmr = rate['smmr_mnths']
-                    self.peak = rate['peak_hours']
-                    self.smmr_peak_cap = rate['smmr_peak_cap']
-                    self.smmr_peak_ncp = rate['smmr_peak_ncp']
-                    self.smmr_offpk_cap = rate['smmr_offpk_cap']
-                    self.smmr_offpk_ncp = rate['smmr_offpk_ncp']
-                    self.wntr_peak_cap = rate['wntr_peak_cap']
-                    self.wntr_peak_ncp = rate['wntr_peak_ncp']
-                    self.wntr_offpk_cap = rate['wntr_offpk_cap']
-                    self.wntr_offpk_ncp = rate['wntr_offpk_ncp']
-                # Applicable to D1_8 rate
+                self.name = rate['name']              
                 if name == 'D1_8':
-                    self.peak_sell = rate['peak_cap'] + rate['peak_ncp'] + self.pscr
-                    self.midpk_sell = rate['midpk_cap'] + rate['midpk_ncp'] + self.pscr
-                    self.offpk_sell = rate['offpk_cap'] + rate['offpk_ncp'] + self.pscr
+                    self.peak_sell = rate['peak_cap'] + rate['peak_ncp'] + pscr
+                    self.midpk_sell = rate['midpk_cap'] + rate['midpk_ncp'] + pscr
+                    self.offpk_sell = rate['offpk_cap'] + rate['offpk_ncp'] + pscr
                     self.peak_buy = self.peak_sell + self.distr
                     self.midpk_buy = self.midpk_sell + self.distr  
                     self.offpk_buy = self.offpk_sell + self.distr  
-        
-        # Applicable to D1_11 and D1_2 rates
-        if name == "D1_11" or name == "D1_2":
-            self.smmr_peak_sell = 0
-            self.smmr_offpk_sell = 0
-            self.wntr_peak_sell = 0
-            self.wntr_offpk_sell = 0
-            self.smmr_peak_buy = 0
-            self.smmr_offpk_buy = 0
-            self.wntr_peak_buy = 0
-            self.wntr_offpk_buy = 0
-            self.calc_rates()
-
+                    # Print purchase rates
+                    if False:
+                        print(self.name + " Purchase Rates")
+                        print("\tPeak: %.3f" % self.peak_buy)
+                        print("\tMid Peak: %.3f" % self.midpk_buy)
+                        print("\tOff Peak: %.3f" % self.offpk_buy + "\n")
+                if name == "D1_11" or name == "D1_2":
+                    self.smmr = rate['smmr_mnths']
+                    self.peak = rate['peak_hours']
+                    # Calculate cost to purchase and sell back electricity in the summer and
+                    # winter during on-peak and off-peak hours
+                    self.smmr_peak_sell = rate['smmr_peak_cap'] + rate['smmr_peak_ncp'] + pscr
+                    self.smmr_offpk_sell = rate['smmr_offpk_cap'] + rate['smmr_offpk_ncp'] + pscr
+                    self.wntr_peak_sell = rate['wntr_peak_cap'] + rate['wntr_peak_ncp'] + pscr
+                    self.wntr_offpk_sell = rate['wntr_offpk_cap'] + rate['wntr_offpk_ncp'] + pscr
+                    self.smmr_peak_buy = self.smmr_peak_sell + self.distr
+                    self.smmr_offpk_buy = self.smmr_offpk_sell + self.distr
+                    self.wntr_peak_buy = self.wntr_peak_sell + self.distr
+                    self.wntr_offpk_buy = self.wntr_offpk_sell + self.distr
+                    # Print purchase rates
+                    if False:
+                        print(self.name + " Purchase Rates")
+                        print("\tSummer Peak: %.3f" % self.smmr_peak_buy)
+                        print("\tSummer OffP: %.3f" % self.smmr_offpk_buy)
+                        print("\tWinter Peak: %.3f" % self.wntr_peak_buy)
+                        print("\tWinter OffP: %.3f" % self.wntr_offpk_buy + "\n")
    
-
-    def calc_rates(self):
-        # Calculate cost to purchase and sell back electricity in the summer and
-        # winter during on-peak and off-peak hours
-        self.smmr_peak_sell = self.smmr_peak_cap + self.smmr_peak_ncp + self.pscr
-        self.smmr_offpk_sell = self.smmr_offpk_cap + self.smmr_offpk_ncp + self.pscr
-        self.wntr_peak_sell = self.wntr_peak_cap + self.wntr_peak_ncp + self.pscr
-        self.wntr_offpk_sell = self.wntr_offpk_cap + self.wntr_offpk_ncp + self.pscr
-        self.smmr_peak_buy = self.smmr_peak_sell + self.distr
-        self.smmr_offpk_buy = self.smmr_offpk_sell + self.distr
-        self.wntr_peak_buy = self.wntr_peak_sell + self.distr
-        self.wntr_offpk_buy = self.wntr_offpk_sell + self.distr
-        # Print purchase rates
-        if False:
-            print(self.name + " Purchase Rates")
-            print("\tSummer Peak: %.3f" % self.smmr_peak_buy)
-            print("\tSummer OffP: %.3f" % self.smmr_offpk_buy)
-            print("\tWinter Peak: %.3f" % self.wntr_peak_buy)
-            print("\tWinter OffP: %.3f" % self.wntr_offpk_buy + "\n")
-
 # Define electricity rates
 D1_11 = Rate("D1_11", elctr_rates)
 D1_2 = Rate("D1_2", elctr_rates)
