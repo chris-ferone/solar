@@ -1,4 +1,10 @@
 {
+  "time_invariant_costs": [
+    {
+      "pscr": 1.917,
+      "distr": 6.879
+    }
+  ],
   "time_varying_costs": [
     {
       "name": "D1_11",
@@ -27,12 +33,6 @@
       "wntr_peak_ncp": 4.105,
       "wntr_offpk_cap": 0.792,
       "wntr_offpk_ncp": 4.105
-    }
-  ],
-  "time_invariant_costs": [
-    {
-      "pscr": 1.917,
-      "distr": 6.879
     }
   ]
 }
