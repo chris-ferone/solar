@@ -25,6 +25,13 @@ elctr_rates = json.load(f)
 # Close file
 f.close()
 
+# Open JSON file containing solar array information
+f = open('solar_params.json')
+# Returns JSON object as a dictionary
+solar_info = json.load(f) 
+# Close file
+f.close()
+
 # Create class to calculate electricity rates purchase and sell back rates
 # DTE Residential Electric Pricing Options:
 # https://newlook.dteenergy.com/wps/wcm/connect/23195474-a4d1-4d38-aa30-a4426fd3336b/WholeHouseRateOptions.pdf?MOD=AJPERES
@@ -79,7 +86,7 @@ D1_2 = Rate("D1_2", elctr_rates)
 D1_8 = Rate("D1_8", elctr_rates)
 
 # Import hourly solar energy generation csv file created by NREL PV_Watts Calculator
-df = pd.read_csv("pvwatts_hourly.csv", skiprows=31)
+df = pd.read_csv("pvwatts_hourly_8_55kW_AZ225.csv", skiprows=31)
 
 # Add three empty columns to the dataframe for each rate option: One to capture 
 # electric sellback rate (¢/kWh) each hour, another to capture hourly profit ($) 
@@ -179,7 +186,7 @@ print("\t D1_11: $" + "{:0,.2f}".format(D1_11_profit))
 print("\t D1_02: $" + "{:0,.2f}".format(D1_2_profit))
 print("\t D1_08: $" + "{:0,.2f}".format(D1_8_profit))
 
-Cost = 35000
+Cost = solar_info['cost']
 print("\nPayback Period (years):")
 print("\t D1_11: " + "{:0,.1f}".format(Cost / D1_11_profit))
 print("\t D1_02: " + "{:0,.1f}".format(Cost / D1_2_profit))
