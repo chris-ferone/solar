@@ -1,6 +1,4 @@
 { 
  "cost": 18000,   
- "dollar_per_W": 2.59, 
- "panels": 16, 
- "panel_size_W":530
+ "pvwatts_csv_path": "pvwatts_hourly_8_55kW_AZ225.csv"
 }

@@ -86,7 +86,7 @@ D1_2 = Rate("D1_2", elctr_rates)
 D1_8 = Rate("D1_8", elctr_rates)
 
 # Import hourly solar energy generation csv file created by NREL PV_Watts Calculator
-df = pd.read_csv("pvwatts_hourly_8_55kW_AZ225.csv", skiprows=31)
+df = pd.read_csv(solar_info['pvwatts_csv_path'], skiprows=31)
 
 # Add three empty columns to the dataframe for each rate option: One to capture 
 # electric sellback rate (¢/kWh) each hour, another to capture hourly profit ($) 
