@@ -192,7 +192,6 @@ print("\t D1_11: " + "{:0,.1f}".format(Cost / D1_11_profit))
 print("\t D1_02: " + "{:0,.1f}".format(Cost / D1_2_profit))
 print("\t D1_08: " + "{:0,.1f}".format(Cost / D1_8_profit))
 
-# Print the results
 print("\nAnnual savings selling zero electricity back to DTE:")
 print("\t D1_11: $" + "{:0,.2f}".format(D1_11_value))
 print("\t D1_02: $" + "{:0,.2f}".format(D1_2_value))
